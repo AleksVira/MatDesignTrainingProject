@@ -1,21 +1,13 @@
 package ru.virarnd.matdesigntrainingproject.ui.main;
 
-import androidx.annotation.ColorInt;
-import androidx.lifecycle.ViewModelProviders;
-
-import android.app.usage.UsageEvents;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.text.Editable;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -24,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -61,15 +52,15 @@ public class MainFragment extends Fragment {
         textInputLayout = view.findViewById(R.id.textInput);
         editText = view.findViewById(R.id.editText);
 
-                btnGo.setTextColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.colorAccent2));
+        btnGo.setTextColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.colorAccent2));
         GradientDrawable btnShape = (GradientDrawable) btnGo.getBackground();
 
         TypedValue typedValue = new TypedValue();
-        getContext().getTheme().resolveAttribute (R.attr.colorPrimary, typedValue, true);
+        getContext().getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
         int myColorPrimary = typedValue.data;
-        getContext().getTheme().resolveAttribute (R.attr.colorPrimaryDark, typedValue, true);
+        getContext().getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
         int myColorPrimaryDark = typedValue.data;
-        getContext().getTheme().resolveAttribute (R.attr.colorAccent, typedValue, true);
+        getContext().getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
         int myColorAccent = typedValue.data;
 
         btnShape.setColor(myColorPrimary);
@@ -87,10 +78,13 @@ public class MainFragment extends Fragment {
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((actionId == EditorInfo.IME_ACTION_GO || event.getAction() == KeyEvent.ACTION_DOWN)&& shouldShowError()) {
-                    showError();
+                if (event.getAction() == KeyEvent.ACTION_DOWN && catchEmptyTextfield()) {
+                    showEditTextError();
+                }
+                if ((actionId == EditorInfo.IME_ACTION_GO || event.getAction() == KeyEvent.ACTION_DOWN) && catchTextViewError()) {
+                    showTextViewError();
                 } else {
-                    hideError();
+                    hideTextViewError();
                 }
                 return false;
             }
@@ -99,18 +93,34 @@ public class MainFragment extends Fragment {
 
     }
 
-    private void hideError() {
+    private void hideTextViewError() {
         textInputLayout.setError(null);
     }
 
-    private void showError() {
-        Log.d(TAG, "showError()");
-        textInputLayout.setError("Только буквы!");
+    private void showTextViewError() {
+        Log.d(TAG, "showTextViewError()");
+        textInputLayout.setError("Only letters allowed!");
     }
 
-    private boolean shouldShowError() {
+    private boolean catchTextViewError() {
         String textInput = editText.getText().toString();
         return !textInput.matches("[\\D]+");
+    }
+
+    private boolean catchEmptyTextfield() {
+        return editText.getText().length() == 0;
+    }
+
+/*
+    private void hideEditTextError() {
+        Log.d(TAG, "hideTextEditError()");
+        textInputLayout.setError(null);
+    }
+*/
+
+    private void showEditTextError() {
+        Log.d(TAG, "showEditTextError()");
+        editText.setError("Empty string!");
     }
 
     public interface OnFragmentInteractionListener {
