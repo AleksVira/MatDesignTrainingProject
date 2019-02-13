@@ -2,4 +2,5 @@
     <string name="app_name">MD Test Project</string>
     <string name="hint_about_text">Enter text without any numbers</string>
     <string name="enter_text_click">Enter text and click</string>
+    <string name="click_me">Now, click me!</string>
 </resources>

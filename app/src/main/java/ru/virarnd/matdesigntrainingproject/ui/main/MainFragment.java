@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -18,6 +19,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -95,10 +98,29 @@ public class MainFragment extends Fragment {
 
     private void hideTextViewError() {
         textInputLayout.setError(null);
+        btnGo.setText(getString(R.string.click_me));
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnGo.setText(getString(R.string.enter_text_click));
+            }
+        }, 3000);
+
+        YoYo.with(Techniques.Pulse)
+                .duration(500)
+                .repeat(5)
+                .playOn(btnGo);
+
     }
 
     private void showTextViewError() {
         Log.d(TAG, "showTextViewError()");
+        YoYo.with(Techniques.Swing)
+                .duration(150)
+                .repeat(3)
+                .playOn(textInputLayout);
         textInputLayout.setError("Only letters allowed!");
     }
 
@@ -111,15 +133,13 @@ public class MainFragment extends Fragment {
         return editText.getText().length() == 0;
     }
 
-/*
-    private void hideEditTextError() {
-        Log.d(TAG, "hideTextEditError()");
-        textInputLayout.setError(null);
-    }
-*/
 
     private void showEditTextError() {
         Log.d(TAG, "showEditTextError()");
+        YoYo.with(Techniques.Shake)
+                .duration(300)
+                .repeat(5)
+                .playOn(editText);
         editText.setError("Empty string!");
     }
 
