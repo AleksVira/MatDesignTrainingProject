@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#59DF97</color>
+    <color name="colorPrimaryDark">#10A254</color>
+    <color name="colorAccent">#E64517</color>
+
+
+    <color name="colorPrimary1">#673AB7</color>
+    <color name="colorPrimaryDark1">#512da8</color>
+    <color name="colorAccent1">#B2FF59</color>
+    <color name="textColor1">#000000</color>
+
+    <color name="colorPrimary2">#8BC34A</color>
+    <color name="colorPrimaryDark2">#689F38</color>
+    <color name="colorAccent2">#FF6E40</color>
+    <color name="textColor2">#000000</color>
+
+
+    <color name="errorTextColor">#FFAB00</color>
+    <color name="hintTextColor">#B2DFDB</color>
+    <color name="user_input_color">#3C998F</color>
+    <color name="controlNormal">#B9E6A4</color>
+    <color name="controlActivated">#A620AF</color>
+    <color name="controlHighlight">#B71C1C</color>
+
+
+</resources>
