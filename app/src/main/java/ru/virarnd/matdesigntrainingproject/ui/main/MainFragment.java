@@ -1,6 +1,8 @@
 package ru.virarnd.matdesigntrainingproject.ui.main;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
@@ -27,14 +29,18 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 
 import ru.virarnd.matdesigntrainingproject.R;
+import ru.virarnd.matdesigntrainingproject.common.MainContract;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements MainContract.MainFragmentView {
 
     private static final String TAG = MainFragment.class.getSimpleName();
     private OnFragmentInteractionListener interactionListener;
     private Button btnGo;
+    private Button risedBtn;
     private TextInputLayout textInputLayout;
     private TextInputEditText editText;
+    private MainFragmentPresenter fragmentPresenter;
+    private DialogInterface.OnClickListener dialogOnClickListener;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -52,6 +58,7 @@ public class MainFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         btnGo = view.findViewById(R.id.button);
+        risedBtn = view.findViewById(R.id.raisedBtn);
         textInputLayout = view.findViewById(R.id.textInput);
         editText = view.findViewById(R.id.editText);
 
@@ -78,6 +85,13 @@ public class MainFragment extends Fragment {
             }
         });
 
+        risedBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentPresenter.raisedBtnPressed();
+            }
+        });
+
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -92,11 +106,16 @@ public class MainFragment extends Fragment {
                 return false;
             }
         });
+
+        fragmentPresenter = new MainFragmentPresenter();
+        fragmentPresenter.attachView(this);
         return view;
 
     }
 
-    private void hideTextViewError() {
+    @Override
+    public void hideTextViewError() {
+        Log.d(TAG, "hideTextViewError()");
         textInputLayout.setError(null);
         btnGo.setText(getString(R.string.click_me));
 
@@ -104,7 +123,9 @@ public class MainFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                btnGo.setText(getString(R.string.enter_text_click));
+                if (btnGo != null) {
+                    btnGo.setText(getString(R.string.enter_text_click));
+                }
             }
         }, 3000);
 
@@ -115,7 +136,8 @@ public class MainFragment extends Fragment {
 
     }
 
-    private void showTextViewError() {
+    @Override
+    public void showTextViewError() {
         Log.d(TAG, "showTextViewError()");
         YoYo.with(Techniques.Swing)
                 .duration(150)
@@ -123,6 +145,18 @@ public class MainFragment extends Fragment {
                 .playOn(textInputLayout);
         textInputLayout.setError("Only letters allowed!");
     }
+
+    @Override
+    public void showEditTextError() {
+        Log.d(TAG, "showEditTextError()");
+        YoYo.with(Techniques.Shake)
+                .duration(300)
+                .repeat(5)
+                .playOn(editText);
+        editText.setError("Empty string!");
+    }
+
+
 
     private boolean catchTextViewError() {
         String textInput = editText.getText().toString();
@@ -133,18 +167,33 @@ public class MainFragment extends Fragment {
         return editText.getText().length() == 0;
     }
 
+    @Override
+    public void showDialogForm() {
+        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme);
+        ad.setTitle(getString(R.string.introductory_text));
+        ad.setMessage(getString(R.string.introductory_text_content));
 
-    private void showEditTextError() {
-        Log.d(TAG, "showEditTextError()");
-        YoYo.with(Techniques.Shake)
-                .duration(300)
-                .repeat(5)
-                .playOn(editText);
-        editText.setError("Empty string!");
+        dialogOnClickListener = new FrameFormListener();
+        String positiveText = getString(android.R.string.ok);
+        String negativeText = getString(android.R.string.cancel);
+        ad.setPositiveButton(positiveText, dialogOnClickListener);
+        ad.setNegativeButton(negativeText, dialogOnClickListener);
+        AlertDialog dialog = ad.create();
+        dialog.show();
     }
+
 
     public interface OnFragmentInteractionListener {
         void onButtonGoClick();
     }
+
+    private class FrameFormListener implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            fragmentPresenter.dialogSelected(which);
+            dialog.dismiss();
+        }
+    }
+
 
 }

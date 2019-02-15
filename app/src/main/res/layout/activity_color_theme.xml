@@ -6,18 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ColorThemeActivity">
 
-<!--
-    <ru.virarnd.matdesigntrainingproject.ui.secondary.TestRectangle
-        android:id="@+id/imageView1"
-        android:layout_width="100pt"
-        android:layout_height="100pt"
-        android:layout_marginStart="10pt"
-        android:layout_marginTop="10pt"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
--->
-
-
     <ImageView
         android:id="@+id/iv1"
         android:layout_width="300px"

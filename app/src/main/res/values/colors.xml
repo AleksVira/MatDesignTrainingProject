@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
     <color name="colorPrimary">#59DF97</color>
     <color name="colorPrimaryDark">#10A254</color>
     <color name="colorAccent">#E64517</color>
@@ -22,6 +23,12 @@
     <color name="controlNormal">#B9E6A4</color>
     <color name="controlActivated">#A620AF</color>
     <color name="controlHighlight">#B71C1C</color>
+
+
+    <color name="control_highlight">#4db6ac</color>
+    <color name="control_activated">#00867d</color>
+    <color name="control_button_normal">#fb8c00</color>
+    <color name="control_normal">#ffbd45</color>
 
 
 </resources>
