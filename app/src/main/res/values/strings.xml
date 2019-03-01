@@ -13,4 +13,17 @@
     <string name="raised_button">Raised button</string>
     <string name="introductory_text">Текст почитать</string>
     <string name="introductory_text_content">Здесь будет какой-то очень нужный текст для ознакомления</string>
+    <string name="drawer_menu_item_first">First</string>
+    <string name="drawer_menu_item_second">Second</string>
+    <string name="drawer_menu_item_third">Third</string>
+
+    <string name="hello_fragment_A">Hello fragment A!</string>
+    <string name="hello_fragment_B">Hello fragment B!!</string>
+    <string name="hello_fragment_C">Hello fragment C!!!</string>
+    <string name="pic_description">picture</string>
+
+    <string name="fragment_dos_hello">2. Hello fragment DOS!</string>
+    <string name="fragment_tres_hello">3. Hello fragment TRES!</string>
+    <string name="fragment_cuatro_hello">4. Hello fragment CUATRO!</string>
+    <string name="fragment_cinco_hello">5. Hello fragment CINCO!</string>
 </resources>

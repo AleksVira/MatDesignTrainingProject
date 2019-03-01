@@ -1,113 +1,174 @@
 package ru.virarnd.matdesigntrainingproject.start_activity;
 
-import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import ru.virarnd.matdesigntrainingproject.ColorThemeActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import ru.virarnd.matdesigntrainingproject.R;
-import ru.virarnd.matdesigntrainingproject.base_activity.BaseActivity;
+import ru.virarnd.matdesigntrainingproject.ui.bottom_navigation.uno.FragmentUno;
+import ru.virarnd.matdesigntrainingproject.ui.drawer.fragment_a.SimpleFragmentA;
+import ru.virarnd.matdesigntrainingproject.ui.drawer.fragment_b_sport.SimpleFragmentB;
+import ru.virarnd.matdesigntrainingproject.ui.drawer.fragment_c_nature.SimpleFragmentC;
 import ru.virarnd.matdesigntrainingproject.ui.main.MainFragment;
 
-public class StartActivity extends BaseActivity implements MainFragment.OnFragmentInteractionListener {
 
+public class StartActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener, FragmentUno.OnScrollListener {
     private final static String TAG = StartActivity.class.getSimpleName();
-    private static final String THEME = "Theme";
 
-    private MainFragment main_fragment;
+    private MainFragment mainFragment;
+    private SimpleFragmentA fragmentA;
+    private SimpleFragmentB fragmentB;
+    private SimpleFragmentC fragmentC;
     private Toolbar toolbar;
-    private int themeNumber;
+    private BottomNavigationView bottomNavigationView;
     private StartActivityPresenter presenter;
+    private FloatingActionButton fab;
+    private NavigationView navigationView;
 
+    private float recyclerViewScrollY;
+//    private int bottomNavViewHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            themeNumber = 2;
-        } else {
-            themeNumber = savedInstanceState.getInt(THEME);
-        }
-        System.out.println("Проверка !!!");
-        if (themeNumber != 0) {
-                switch (themeNumber) {
-                case 1:
-                    setNewTheme(R.style.AppTheme_First);
-                    break;
-                case 2:
-                    setNewTheme(R.style.AppTheme_Second);
-                    break;
-            }
-        }
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_base);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         presenter = new StartActivityPresenter();
         presenter.attachView(this);
 
-
-        main_fragment = MainFragment.newInstance();
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, main_fragment).commitNow();
+        mainFragment = MainFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, mainFragment, MainFragment.class.getName()).addToBackStack(MainFragment.class.getName()).commit();
 
         fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.fabClicked(view);
+        fab.setOnClickListener(view -> presenter.fabClicked(view));
 
-            }
-        });
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.getMenu().setGroupCheckable(0, false, true);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new MyBottomNavigationViewListener(this, bottomNavigationView));
+
+
+        // Измеряю и сохраняю высоту BNV
+//        Resources resources = getResources();
+//        int id = resources.getIdentifier("design_bottom_navigation_height", "dimen", this.getPackageName());
+//        bottomNavViewHeight = resources.getDimensionPixelSize(id);
 
 
     }
 
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putInt(THEME, themeNumber);
         super.onSaveInstanceState(outState);
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.base, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        presenter.navigationItemWasSelected(id);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+    @Override
     public void onButtonGoClick() {
-        Intent intent = new Intent(this, ColorThemeActivity.class);
-        startActivityForResult(intent, 1);
+
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d(TAG, "onActivityResult");
-        if (data == null) {
-            return;
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            bottomNavigationView.getMenu().setGroupCheckable(0, false, true);
+            FragmentManager fm = getSupportFragmentManager();
+            Log.d(TAG, "popBackStack()");
+            if (fm.getBackStackEntryCount() == 1) {
+                finish();
+            } else {
+                fm.popBackStack();
+            }
         }
-        themeNumber = data.getIntExtra("theme_number", 1);
-        System.out.println("ТЕМА: " + themeNumber);
-
-        switch (themeNumber) {
-            case 1:
-                setNewTheme(R.style.AppTheme_First);
-                break;
-            case 2:
-                setNewTheme(R.style.AppTheme_Second);
-                break;
-        }
-        recreate();
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         presenter.detachView();
-        super.onDestroy();
+        super.onStop();
     }
 
-    public void showCustomSnackbar(View view) {
+
+    public void showFragmentA() {
+        fragmentA = SimpleFragmentA.newInstance();
+        getSupportFragmentManager().beginTransaction().
+                replace(R.id.frame_layout, fragmentA).
+                addToBackStack(SimpleFragmentA.class.getName()).
+                commit();
+    }
+
+    public void showFragmentB() {
+        fragmentB = SimpleFragmentB.newInstance();
+        getSupportFragmentManager().beginTransaction().
+                replace(R.id.frame_layout, fragmentB).
+                addToBackStack(SimpleFragmentB.class.getName()).
+                commit();
+    }
+
+    public void showFragmentC() {
+        fragmentC = SimpleFragmentC.newInstance();
+        getSupportFragmentManager().beginTransaction().
+                replace(R.id.frame_layout, fragmentC).
+                addToBackStack(SimpleFragmentC.class.getName()).
+                commit();
+    }
+
+    public void showCustomSnackBar(View view) {
         Snackbar snackbar = Snackbar.make(view, "Фото добавлено", Snackbar.LENGTH_LONG);
         snackbar.setActionTextColor(getResources().getColor(R.color.design_default_color_primary));
         TypedValue typedValue = new TypedValue();
@@ -116,6 +177,29 @@ public class StartActivity extends BaseActivity implements MainFragment.OnFragme
         View snackBarView = snackbar.getView();
         snackBarView.setBackgroundColor(colorPrimary);
         snackbar.setAction("Action", null);
+
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) snackbar.getView().getLayoutParams();
+        // SnackBar учитывает текущее положение BNV
+        params.setMargins(0, 0, 0, (int)(bottomNavigationView.getHeight() - bottomNavigationView.getTranslationY()));
+        snackbar.getView().setLayoutParams(params);
+
         snackbar.show();
     }
+
+    @Override
+    public void onScrollY(int yScroll) {
+        // Когда скролл вверх, BNV прячется. Когда хоть немного вниз -- появляется.
+        recyclerViewScrollY += yScroll;
+        if (yScroll >= 0) {
+            bottomNavigationView.setTranslationY(recyclerViewScrollY / 2.5f);
+        } else {
+            bottomNavigationView.setTranslationY(0);
+        }
+    }
+
+    @Override
+    public void onPauseFragmentUno() {
+        bottomNavigationView.setTranslationY(0);
+    }
+
 }

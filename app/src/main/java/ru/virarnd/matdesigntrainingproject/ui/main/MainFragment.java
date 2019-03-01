@@ -36,20 +36,24 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
     private static final String TAG = MainFragment.class.getSimpleName();
     private OnFragmentInteractionListener interactionListener;
     private Button btnGo;
-    private Button risedBtn;
+    private Button raisedBtn;
     private TextInputLayout textInputLayout;
     private TextInputEditText editText;
     private MainFragmentPresenter fragmentPresenter;
     private DialogInterface.OnClickListener dialogOnClickListener;
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        interactionListener = (OnFragmentInteractionListener) context;
+    public MainFragment() {
     }
 
     public static MainFragment newInstance() {
         return new MainFragment();
+    }
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        interactionListener = (OnFragmentInteractionListener) context;
     }
 
     @Nullable
@@ -58,7 +62,7 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         btnGo = view.findViewById(R.id.button);
-        risedBtn = view.findViewById(R.id.raisedBtn);
+        raisedBtn = view.findViewById(R.id.raisedBtn);
         textInputLayout = view.findViewById(R.id.textInput);
         editText = view.findViewById(R.id.editText);
 
@@ -78,33 +82,20 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
         btnGo.setTextColor(myColorAccent);
 
         btnGo.setText(getString(R.string.enter_text_click));
-        btnGo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                interactionListener.onButtonGoClick();
-            }
-        });
+        btnGo.setOnClickListener(v -> interactionListener.onButtonGoClick());
 
-        risedBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragmentPresenter.raisedBtnPressed();
-            }
-        });
+        raisedBtn.setOnClickListener(v -> fragmentPresenter.raisedBtnPressed());
 
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN && catchEmptyTextfield()) {
-                    showEditTextError();
-                }
-                if ((actionId == EditorInfo.IME_ACTION_GO || event.getAction() == KeyEvent.ACTION_DOWN) && catchTextViewError()) {
-                    showTextViewError();
-                } else {
-                    hideTextViewError();
-                }
-                return false;
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && catchEmptyTextfield()) {
+                showEditTextError();
             }
+            if ((actionId == EditorInfo.IME_ACTION_GO || event.getAction() == KeyEvent.ACTION_DOWN) && catchTextViewError()) {
+                showTextViewError();
+            } else {
+                hideTextViewError();
+            }
+            return false;
         });
 
         fragmentPresenter = new MainFragmentPresenter();
@@ -120,12 +111,9 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
         btnGo.setText(getString(R.string.click_me));
 
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (btnGo != null) {
-                    btnGo.setText(getString(R.string.enter_text_click));
-                }
+        handler.postDelayed(() -> {
+            if (btnGo != null) {
+                btnGo.setText(getString(R.string.enter_text_click));
             }
         }, 3000);
 
@@ -157,7 +145,6 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
     }
 
 
-
     private boolean catchTextViewError() {
         String textInput = editText.getText().toString();
         return !textInput.matches("[\\D]+");
@@ -169,17 +156,14 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
 
     @Override
     public void showDialogForm() {
-        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme);
-        ad.setTitle(getString(R.string.introductory_text));
-        ad.setMessage(getString(R.string.introductory_text_content));
-
         dialogOnClickListener = new FrameFormListener();
-        String positiveText = getString(android.R.string.ok);
-        String negativeText = getString(android.R.string.cancel);
-        ad.setPositiveButton(positiveText, dialogOnClickListener);
-        ad.setNegativeButton(negativeText, dialogOnClickListener);
-        AlertDialog dialog = ad.create();
-        dialog.show();
+        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme);
+        ad.setTitle(getString(R.string.introductory_text))
+                .setMessage(getString(R.string.introductory_text_content))
+                .setPositiveButton(getString(android.R.string.ok), dialogOnClickListener)
+                .setNegativeButton(getString(android.R.string.cancel), dialogOnClickListener)
+                .create()
+                .show();
     }
 
 

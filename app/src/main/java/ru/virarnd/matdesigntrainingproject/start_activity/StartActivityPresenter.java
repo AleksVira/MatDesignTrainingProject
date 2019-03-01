@@ -2,8 +2,7 @@ package ru.virarnd.matdesigntrainingproject.start_activity;
 
 import android.view.View;
 
-import com.google.android.material.snackbar.Snackbar;
-
+import ru.virarnd.matdesigntrainingproject.R;
 import ru.virarnd.matdesigntrainingproject.common.MainContract;
 
 public class StartActivityPresenter implements MainContract.StartPresenter {
@@ -23,7 +22,7 @@ public class StartActivityPresenter implements MainContract.StartPresenter {
     @Override
     public void fabClicked(View view) {
         //Do something;
-        startActivity.showCustomSnackbar(view);
+        startActivity.showCustomSnackBar(view);
     }
 
     @Override
@@ -40,4 +39,17 @@ public class StartActivityPresenter implements MainContract.StartPresenter {
     public void onDestroy() {
 
     }
+
+    @Override
+    public void navigationItemWasSelected(int id) {
+        if (id == R.id.fragment_a) {
+            startActivity.showFragmentA();
+        } else if (id == R.id.fragment_b) {
+            startActivity.showFragmentB();
+        } else if (id == R.id.fragment_c) {
+            startActivity.showFragmentC();
+        }
+
+    }
+
 }
