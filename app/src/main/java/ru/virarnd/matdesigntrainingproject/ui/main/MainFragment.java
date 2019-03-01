@@ -19,10 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -36,7 +36,7 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
     private static final String TAG = MainFragment.class.getSimpleName();
     private OnFragmentInteractionListener interactionListener;
     private Button btnGo;
-    private Button raisedBtn;
+    private MaterialButton materialBtn;
     private TextInputLayout textInputLayout;
     private TextInputEditText editText;
     private MainFragmentPresenter fragmentPresenter;
@@ -62,12 +62,12 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         btnGo = view.findViewById(R.id.button);
-        raisedBtn = view.findViewById(R.id.raisedBtn);
+        materialBtn = view.findViewById(R.id.materialBtn);
         textInputLayout = view.findViewById(R.id.textInput);
         editText = view.findViewById(R.id.editText);
 
         btnGo.setTextColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.colorAccent2));
-        GradientDrawable btnShape = (GradientDrawable) btnGo.getBackground();
+//        GradientDrawable btnShape = (GradientDrawable) btnGo.getBackground();
 
         TypedValue typedValue = new TypedValue();
         getContext().getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
@@ -77,14 +77,14 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
         getContext().getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
         int myColorAccent = typedValue.data;
 
-        btnShape.setColor(myColorPrimary);
-        btnShape.setStroke(15, myColorPrimaryDark);
-        btnGo.setTextColor(myColorAccent);
+//        btnShape.setColor(myColorPrimary);
+//        btnShape.setStroke(15, myColorPrimaryDark);
+        btnGo.setTextColor(myColorPrimary);
 
         btnGo.setText(getString(R.string.enter_text_click));
         btnGo.setOnClickListener(v -> interactionListener.onButtonGoClick());
 
-        raisedBtn.setOnClickListener(v -> fragmentPresenter.raisedBtnPressed());
+        materialBtn.setOnClickListener(v -> fragmentPresenter.raisedBtnPressed());
 
         editText.setOnEditorActionListener((v, actionId, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN && catchEmptyTextfield()) {
@@ -157,7 +157,8 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
     @Override
     public void showDialogForm() {
         dialogOnClickListener = new FrameFormListener();
-        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme);
+        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
+//        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme);
         ad.setTitle(getString(R.string.introductory_text))
                 .setMessage(getString(R.string.introductory_text_content))
                 .setPositiveButton(getString(android.R.string.ok), dialogOnClickListener)

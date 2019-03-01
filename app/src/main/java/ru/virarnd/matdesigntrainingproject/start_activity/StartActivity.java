@@ -36,14 +36,12 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
     private SimpleFragmentA fragmentA;
     private SimpleFragmentB fragmentB;
     private SimpleFragmentC fragmentC;
-    private Toolbar toolbar;
     private BottomNavigationView bottomNavigationView;
     private StartActivityPresenter presenter;
     private FloatingActionButton fab;
     private NavigationView navigationView;
 
     private float recyclerViewScrollY;
-//    private int bottomNavViewHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +72,6 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.getMenu().setGroupCheckable(0, false, true);
         bottomNavigationView.setOnNavigationItemSelectedListener(new MyBottomNavigationViewListener(this, bottomNavigationView));
-
-
-        // Измеряю и сохраняю высоту BNV
-//        Resources resources = getResources();
-//        int id = resources.getIdentifier("design_bottom_navigation_height", "dimen", this.getPackageName());
-//        bottomNavViewHeight = resources.getDimensionPixelSize(id);
 
 
     }

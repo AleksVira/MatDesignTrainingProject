@@ -1,7 +1,6 @@
 package ru.virarnd.matdesigntrainingproject.ui.bottom_navigation.uno;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -14,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 import ru.virarnd.matdesigntrainingproject.R;
@@ -28,8 +27,8 @@ public class FragmentUno extends Fragment implements MainContract.FragmentUnoVie
     private RecyclerView recyclerView;
     private FragmentUnoPresenter fragmentPresenter;
     private SnapHelper snapHelper;
-    private Activity parentActivity;
-
+    private SpotAdapter adapter;
+    private ItemTouchHelper itemTouchHelper;
     private OnScrollListener scrollListener;
 
     public FragmentUno() {
@@ -49,12 +48,19 @@ public class FragmentUno extends Fragment implements MainContract.FragmentUnoVie
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        scrollListener = null;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentPresenter = new FragmentUnoPresenter();
         fragmentPresenter.attachView(this);
-        parentActivity = getActivity();
-        Log.d(TAG, parentActivity.getClass().getName());
+        adapter = new SpotAdapter(fragmentPresenter);
+        itemTouchHelper = new ItemTouchHelper(new SpotItemCallback(adapter));
+        adapter.setOnDragListener(spotViewHolder -> itemTouchHelper.startDrag(spotViewHolder));
     }
 
     @Override
@@ -63,39 +69,38 @@ public class FragmentUno extends Fragment implements MainContract.FragmentUnoVie
             view = inflater.inflate(R.layout.fragment_bottom_navigation_uno, container, false);
         }
         recyclerView = view.findViewById(R.id.rv_cards_grid);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new SpotAdapter(fragmentPresenter));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                scrollListener.onScrollY(dy);
-            }
-        });
-
+        recyclerView.addOnScrollListener(new RecyclerScrollListener());
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 /*
         if (snapHelper == null) {
             snapHelper = new LinearSnapHelper();
             snapHelper.attachToRecyclerView(recyclerView);
         }
 */
-
-        return view;
+      return view;
     }
 
-    public interface OnScrollListener {
-        void onScrollY(int yScroll);
-        void onPauseFragmentUno();
-
-    }
 
     @Override
     public void onPause() {
         super.onPause();
         Log.d(TAG, "I’m not visible!!!");
         scrollListener.onPauseFragmentUno();
+    }
+
+    private class RecyclerScrollListener extends RecyclerView.OnScrollListener {
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            scrollListener.onScrollY(dy);
+        }
+    }
+
+    public interface OnScrollListener {
+        void onScrollY(int yScroll);
+        void onPauseFragmentUno();
     }
 }
