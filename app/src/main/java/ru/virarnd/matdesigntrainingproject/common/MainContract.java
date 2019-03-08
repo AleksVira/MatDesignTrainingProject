@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 import ru.virarnd.matdesigntrainingproject.model.Spot;
 import ru.virarnd.matdesigntrainingproject.start_activity.StartActivity;
+import ru.virarnd.matdesigntrainingproject.ui.bottom_navigation.dos.FragmentAllPhotos;
+import ru.virarnd.matdesigntrainingproject.ui.bottom_navigation.dos.FragmentAllPhotosPresenter;
+import ru.virarnd.matdesigntrainingproject.ui.bottom_navigation.dos.FragmentDos;
+import ru.virarnd.matdesigntrainingproject.model.PhotoItem;
 import ru.virarnd.matdesigntrainingproject.ui.bottom_navigation.uno.FragmentUno;
 import ru.virarnd.matdesigntrainingproject.ui.main.MainFragment;
 
@@ -25,6 +29,7 @@ public interface MainContract {
         void onCardClicked();
         void onDestroy();
 
+        void nameOfVisibleFragment(String fragmentName);
     }
 
 
@@ -52,7 +57,7 @@ public interface MainContract {
     interface DataModel {
         String loadPictures();
         ArrayList<Spot> loadSpotList();
-
+        ArrayList<PhotoItem> loadAllPhotosList();
     }
 
     interface FragmentUnoView {
@@ -64,5 +69,17 @@ public interface MainContract {
         void detachView();
 
         ArrayList<Spot> getSpotList();
+    }
+
+    interface FragmentDosPresenterRules {
+        void attachView(FragmentDos fragmentUno);
+        void detachView();
+    }
+
+    interface FragmentAllPhotosPresenterRules {
+        void attachView(FragmentAllPhotos fragmentAllPhotos);
+        void detachView();
+
+        ArrayList<PhotoItem> getPhotoItemsList();
     }
 }

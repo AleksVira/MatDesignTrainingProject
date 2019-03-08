@@ -20,8 +20,6 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ornament"
-
-
             />
 
         <TextView

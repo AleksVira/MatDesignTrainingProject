@@ -26,4 +26,8 @@
     <string name="fragment_tres_hello">3. Hello fragment TRES!</string>
     <string name="fragment_cuatro_hello">4. Hello fragment CUATRO!</string>
     <string name="fragment_cinco_hello">5. Hello fragment CINCO!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="fragment_all_photos">Hello fragment all photos</string>
+    <string name="fragment_selected_photos">Hello fragment selected photos!</string>
 </resources>

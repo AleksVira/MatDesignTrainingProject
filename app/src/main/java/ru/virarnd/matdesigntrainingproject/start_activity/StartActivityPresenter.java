@@ -4,6 +4,7 @@ import android.view.View;
 
 import ru.virarnd.matdesigntrainingproject.R;
 import ru.virarnd.matdesigntrainingproject.common.MainContract;
+import ru.virarnd.matdesigntrainingproject.ui.bottom_navigation.dos.FragmentDos;
 
 public class StartActivityPresenter implements MainContract.StartPresenter {
 
@@ -38,6 +39,13 @@ public class StartActivityPresenter implements MainContract.StartPresenter {
     @Override
     public void onDestroy() {
 
+    }
+
+    @Override
+    public void nameOfVisibleFragment(String fragmentName) {
+        if (fragmentName.equals(FragmentDos.class.getSimpleName())) {
+            startActivity.hideDownBottomNavigationBar();
+        }
     }
 
     @Override

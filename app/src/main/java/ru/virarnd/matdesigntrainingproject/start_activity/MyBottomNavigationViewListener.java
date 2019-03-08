@@ -18,9 +18,11 @@ public class MyBottomNavigationViewListener implements BottomNavigationView.OnNa
     private final static String TAG = MyBottomNavigationViewListener.class.getSimpleName();
     private StartActivity startActivity;
     private BottomNavigationView bottomNavigationView;
+    private StartActivityPresenter presenter;
 
-    public MyBottomNavigationViewListener(StartActivity startActivity, BottomNavigationView bottomNavigationView) {
+    public MyBottomNavigationViewListener(StartActivity startActivity, StartActivityPresenter presenter, BottomNavigationView bottomNavigationView) {
         this.startActivity = startActivity;
+        this.presenter = presenter;
         this.bottomNavigationView = bottomNavigationView;
     }
 
@@ -34,6 +36,7 @@ public class MyBottomNavigationViewListener implements BottomNavigationView.OnNa
                 break;
             case (R.id.bot_nav_action_2):
                 replaceFragment(FragmentDos.newInstance(), FragmentDos.class.getSimpleName());
+                presenter.nameOfVisibleFragment(FragmentDos.class.getSimpleName());
                 break;
             case (R.id.bot_nav_action_3):
                 replaceFragment(FragmentTres.newInstance(), FragmentTres.class.getSimpleName());

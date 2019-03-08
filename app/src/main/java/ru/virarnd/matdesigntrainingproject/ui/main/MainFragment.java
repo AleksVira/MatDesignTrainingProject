@@ -35,12 +35,14 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
 
     private static final String TAG = MainFragment.class.getSimpleName();
     private OnFragmentInteractionListener interactionListener;
+    private View view;
     private Button btnGo;
     private MaterialButton materialBtn;
     private TextInputLayout textInputLayout;
     private TextInputEditText editText;
     private MainFragmentPresenter fragmentPresenter;
     private DialogInterface.OnClickListener dialogOnClickListener;
+
 
     public MainFragment() {
     }
@@ -58,9 +60,10 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.main_fragment, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (view == null) {
+            view = inflater.inflate(R.layout.main_fragment, container, false);
+        }
         btnGo = view.findViewById(R.id.button);
         materialBtn = view.findViewById(R.id.materialBtn);
         textInputLayout = view.findViewById(R.id.textInput);
@@ -158,7 +161,6 @@ public class MainFragment extends Fragment implements MainContract.MainFragmentV
     public void showDialogForm() {
         dialogOnClickListener = new FrameFormListener();
         AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
-//        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme);
         ad.setTitle(getString(R.string.introductory_text))
                 .setMessage(getString(R.string.introductory_text_content))
                 .setPositiveButton(getString(android.R.string.ok), dialogOnClickListener)

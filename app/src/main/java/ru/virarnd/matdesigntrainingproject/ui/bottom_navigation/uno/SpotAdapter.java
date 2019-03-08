@@ -43,12 +43,14 @@ public class SpotAdapter extends RecyclerView.Adapter implements SpotItemAdapter
         spotViewHolder.spotName.setText(spot.getName());
         spotViewHolder.spotDate.setText(spot.getStringDate());
 
-        spotViewHolder.imageForDrag.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN && onDragListener != null) {
-                onDragListener.onDrag(spotViewHolder);
+        spotViewHolder.imageForDrag.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN && onDragListener != null) {
+                    onDragListener.onDrag(spotViewHolder);
+                }
+                return false;
             }
-
-            return false;
         });
 
 

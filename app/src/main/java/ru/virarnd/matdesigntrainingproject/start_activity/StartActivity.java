@@ -1,12 +1,15 @@
 package ru.virarnd.matdesigntrainingproject.start_activity;
 
-import android.content.res.Resources;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,6 +25,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import ru.virarnd.matdesigntrainingproject.R;
+import ru.virarnd.matdesigntrainingproject.ui.bottom_navigation.dos.FragmentDos;
 import ru.virarnd.matdesigntrainingproject.ui.bottom_navigation.uno.FragmentUno;
 import ru.virarnd.matdesigntrainingproject.ui.drawer.fragment_a.SimpleFragmentA;
 import ru.virarnd.matdesigntrainingproject.ui.drawer.fragment_b_sport.SimpleFragmentB;
@@ -71,7 +75,7 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.getMenu().setGroupCheckable(0, false, true);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new MyBottomNavigationViewListener(this, bottomNavigationView));
+        bottomNavigationView.setOnNavigationItemSelectedListener(new MyBottomNavigationViewListener(this, presenter, bottomNavigationView));
 
 
     }
@@ -121,6 +125,15 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
             bottomNavigationView.getMenu().setGroupCheckable(0, false, true);
             FragmentManager fm = getSupportFragmentManager();
             Log.d(TAG, "popBackStack()");
+            int lastFragmentCount = fm.getBackStackEntryCount() - 1;
+            FragmentManager.BackStackEntry lastFragmentInStack = fm.getBackStackEntryAt(lastFragmentCount);
+            String backStackEntryName = lastFragmentInStack.getName();
+            Log.d(TAG, "Last in BackStack name = " + backStackEntryName);
+            if (backStackEntryName.equals(FragmentDos.class.getSimpleName())) {
+                //TODO Show BNV again
+                Log.d(TAG, "Now I’ll show you BottomNavView again");
+                showAgainBottomNavigationBar();
+            }
             if (fm.getBackStackEntryCount() == 1) {
                 finish();
             } else {
@@ -194,4 +207,23 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
         bottomNavigationView.setTranslationY(0);
     }
 
+    public void hideDownBottomNavigationBar() {
+        ObjectAnimator bottomNavigationViewAnimatorX = ObjectAnimator.ofFloat(bottomNavigationView, "translationX", bottomNavigationView.getWidth());
+        ObjectAnimator bottomNavigationViewAnimatorY = ObjectAnimator.ofFloat(bottomNavigationView, "translationY", bottomNavigationView.getWidth());
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(bottomNavigationViewAnimatorX, bottomNavigationViewAnimatorY);
+        animatorSet.setDuration(500);
+        animatorSet.setInterpolator(new AccelerateInterpolator());
+        animatorSet.start();
+    }
+
+    public void showAgainBottomNavigationBar() {
+        ObjectAnimator bottomNavigationViewAnimatorX = ObjectAnimator.ofFloat(bottomNavigationView, "translationX", 0);
+        ObjectAnimator bottomNavigationViewAnimatorY = ObjectAnimator.ofFloat(bottomNavigationView, "translationY", 0);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(bottomNavigationViewAnimatorX, bottomNavigationViewAnimatorY);
+        animatorSet.setDuration(500);
+        animatorSet.setInterpolator(new OvershootInterpolator());
+        animatorSet.start();
+    }
 }
