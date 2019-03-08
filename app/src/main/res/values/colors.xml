@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <color name="white">#FFFFFF</color>
+    <color name="gray">#BBBB</color>
+
+
+
     <color name="colorPrimary">#59DF97</color>
     <color name="colorPrimaryDark">#10A254</color>
     <color name="colorAccent">#E64517</color>
@@ -22,6 +28,30 @@
     <color name="controlNormal">#B9E6A4</color>
     <color name="controlActivated">#A620AF</color>
     <color name="controlHighlight">#B71C1C</color>
+
+
+    <color name="control_highlight">#4db6ac</color>
+    <color name="control_activated">#00867d</color>
+    <color name="control_button_normal">#fb8c00</color>
+    <color name="control_normal">#ffbd45</color>
+
+
+    <!-- Colors for background animation -->
+    <!-- 1st Gradient color -->
+    <color name="colorPurple_A400">#D500F9</color>
+    <color name="colorPurple_900">#4A148C</color>
+
+    <!-- 2nd Gradient color -->
+    <color name="colorAmber_A400">#FFC400</color>
+    <color name="colorAmber_900">#FF6F00</color>
+
+    <!-- 3rd Gradient color -->
+    <color name="colorGreen_A400">#00E676</color>
+    <color name="colorGreen_900">#1B5E20</color>
+
+    <!-- 4th Gradient color -->
+    <color name="colorRed_A400">#FF1744</color>
+    <color name="colorRed_900">#B71C1C</color>
 
 
 </resources>

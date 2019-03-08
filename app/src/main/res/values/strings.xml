@@ -1,5 +1,33 @@
 <resources>
     <string name="app_name">MD Test Project</string>
-    <string name="hint_about_text">Введите текст без цифр</string>
+    <string name="hint_about_text">Enter text without any numbers</string>
     <string name="enter_text_click">Enter text and click</string>
+    <string name="click_me">Now, click me!</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="raised_button">Raised button</string>
+    <string name="introductory_text">Текст почитать</string>
+    <string name="introductory_text_content">Здесь будет какой-то очень нужный текст для ознакомления</string>
+    <string name="drawer_menu_item_first">First</string>
+    <string name="drawer_menu_item_second">Second</string>
+    <string name="drawer_menu_item_third">Third</string>
+
+    <string name="hello_fragment_A">Hello fragment A!</string>
+    <string name="hello_fragment_B">Hello fragment B!!</string>
+    <string name="hello_fragment_C">Hello fragment C!!!</string>
+    <string name="pic_description">picture</string>
+
+    <string name="fragment_dos_hello">2. Hello fragment DOS!</string>
+    <string name="fragment_tres_hello">3. Hello fragment TRES!</string>
+    <string name="fragment_cuatro_hello">4. Hello fragment CUATRO!</string>
+    <string name="fragment_cinco_hello">5. Hello fragment CINCO!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="fragment_all_photos">Hello fragment all photos</string>
+    <string name="fragment_selected_photos">Hello fragment selected photos!</string>
 </resources>
